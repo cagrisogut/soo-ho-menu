@@ -61,7 +61,7 @@ const menuData = {
           name: { tr: "Cookie + Kahve Kampanyası", en: "Cookie + Coffee Campaign" },
           price: "300 TL",
           description: { tr: "Çikolatalı cookie ile istediğiniz herhangi bir kahve kombinasyonu. Tatlı ve kahvenin mükemmel uyumu!", en: "Chocolate cookie with any coffee of your choice. The perfect harmony of sweet and coffee!" },
-          ingredients: { tr: "Çikolatalı cookie, seçtiğiniz kahve\", en: \"Chocolate cookie, coffee of your choice" },
+          ingredients: { tr: "Çikolatalı cookie, seçtiğiniz kahve", en: "Chocolate cookie, coffee of your choice" },
           image: "/images/food/cookie_kahve.png"
         },
         {
@@ -70,6 +70,13 @@ const menuData = {
           description: { tr: "İstediğiniz herhangi bir sandviç çeşidi ile sıcacık çay ikramı. Doyurucu ve lezzetli bir kombinasyon!", en: "Any sandwich of your choice with hot tea. A satisfying and delicious combination!" },
           ingredients: { tr: "Seçtiğiniz sandviç, çay", en: "Sandwich of your choice, tea" },
           image: "/images/food/sandvic_cay.png"
+        },
+        {
+          name: { tr: "Sooho Sepeti + İçecek Kampanyası", en: "Sooho Basket + Drink Campaign" },
+          price: "100 TL/kutu",
+          description: { tr: "Sooho Sepeti yanına içilen her kutu içecek sadece 100 TL! Premium sepetinizin tadını en sevdiğiniz içecekle çıkarın.", en: "Every canned drink with Sooho Basket only 100 TL! Enjoy your premium basket with your favorite beverage." },
+          ingredients: { tr: "Sooho Sepeti + kutu içecek (Kola/Fanta/Sprite/Fuse Tea)", en: "Sooho Basket + canned drink (Coke/Fanta/Sprite/Fuse Tea)" },
+          image: "/images/food/sooho_sepeti.png"
         }
       ]
     },
@@ -157,6 +164,13 @@ const menuData = {
           image: "/images/food/patates_sepeti.png"
         },
         {
+          name: { tr: "Sandviç", en: "Sandwich" },
+          price: "200 TL",
+          description: { tr: "Taze malzemelerle hazırlanan lezzetli sandviç. İsteğe göre özel hazırlanır.", en: "Delicious sandwich prepared with fresh ingredients. Customized upon request." },
+          ingredients: { tr: "Taze ekmek, peynir, domates, marul, salatalık", en: "Fresh bread, cheese, tomato, lettuce, cucumber" },
+          image: "/images/food/sandvic.png"
+        },
+        {
           name: { tr: "Sosis Sepeti", en: "Sausage Basket" },
           price: "280 TL",
           description: { tr: "Kızarmış sosis ve patates cipsleri bir arada, keyifli bir atıştırmalık.", en: "Fried sausages and potato chips together, a delightful snack." },
@@ -222,6 +236,13 @@ const menuData = {
     {
       category: "Tatlılar",
       items: [
+        {
+          name: { tr: "Cookie", en: "Cookie" },
+          price: "150 TL",
+          description: { tr: "Taze pişmiş, çikolata parçacıklı cookie. Kahvenizin yanında mükemmel bir tatlı.", en: "Freshly baked chocolate chip cookie. Perfect sweet treat with your coffee." },
+          ingredients: { tr: "Un, çikolata parçacıkları, tereyağı, şeker", en: "Flour, chocolate chips, butter, sugar" },
+          image: "/images/food/cookie.png"
+        },
         {
           name: { tr: "Tatlı Çeşitleri", en: "Dessert Varieties" },
           price: "250 TL",
