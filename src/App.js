@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Coffee, UtensilsCrossed, Sparkles, ChevronRight, Flame, Snowflake, MapPin, Phone, Mail, Instagram } from 'lucide-react';
+import { Coffee, UtensilsCrossed, Sparkles, ChevronRight, Flame, Snowflake, MapPin, Phone, Mail, Instagram, Music } from 'lucide-react';
 
 // UI Translations
 const translations = {
@@ -11,6 +11,7 @@ const translations = {
     digitalMenu: "Dijital Menü",
     food: "Yiyecekler",
     drinks: "İçecekler",
+    music: "Canlı Müzik",
     enjoy: "Afiyet olsun!",
     ingredients: "İçerik:",
     location: "Konum",
@@ -23,7 +24,8 @@ const translations = {
       "Ana Yemekler": "Ana Yemekler",
       "Sıcak İçecekler": "Sıcak İçecekler",
       "Soğuk İçecekler": "Soğuk İçecekler",
-      "Tatlılar": "Tatlılar"
+      "Tatlılar": "Tatlılar",
+      "Canlı Müzik": "Canlı Müzik"
     }
   },
   en: {
@@ -34,6 +36,7 @@ const translations = {
     digitalMenu: "Digital Menu",
     food: "Food",
     drinks: "Drinks",
+    music: "Live Music",
     enjoy: "Enjoy your meal!",
     ingredients: "Ingredients:",
     location: "Location",
@@ -46,7 +49,8 @@ const translations = {
       "Ana Yemekler": "Main Courses",
       "Sıcak İçecekler": "Hot Beverages",
       "Soğuk İçecekler": "Cold Beverages",
-      "Tatlılar": "Desserts"
+      "Tatlılar": "Desserts",
+      "Canlı Müzik": "Live Music"
     }
   }
 };
@@ -139,7 +143,7 @@ const menuData = {
         },
         {
           name: { tr: "Sucuk Ekmek", en: "Turkish Sausage Sandwich" },
-          price: "380 TL",
+          price: "390 TL",
           description: { tr: "Sucuk ve ekmek, isteğe göre domates, marul, turşu eklenebilir.", en: "Sausage and bread; tomato, lettuce, pickles can be added upon request." },
           ingredients: { tr: "Sucuk, taze ekmek, opsiyonel: domates, marul, turşu", en: "Turkish sausage, fresh bread, optional: tomato, lettuce, pickles" },
           image: "/images/food/sucuk_ekmek.png"
@@ -245,7 +249,7 @@ const menuData = {
         },
         {
           name: { tr: "Tatlı Çeşitleri", en: "Dessert Varieties" },
-          price: "250 TL",
+          price: "280 TL",
           description: { tr: "Günlük taze tatlı çeşitlerimiz. Lütfen garsonunuza sorunuz.", en: "Our daily fresh dessert varieties. Please ask your waiter." },
           ingredients: { tr: "Günlük tatlılar", en: "Daily desserts" },
           image: "/images/food/tatli_cesitleri.png"
@@ -288,7 +292,7 @@ const menuData = {
         },
         {
           name: { tr: "Mocha", en: "Mocha" },
-          price: "200 TL",
+          price: "250 TL",
           description: { tr: "Espresso, çikolata ve süt köpüğünün tatlı buluşması.", en: "The sweet meeting of espresso, chocolate and milk foam." },
           ingredients: { tr: "Espresso, çikolata sosu, süt, süt köpüğü", en: "Espresso, chocolate sauce, milk, milk foam" },
           image: "/images/drinks/mocha.png"
@@ -302,7 +306,7 @@ const menuData = {
         },
         {
           name: { tr: "Karamel Latte", en: "Caramel Latte" },
-          price: "200 TL",
+          price: "250 TL",
           description: { tr: "Karamel şurubuyla tatlandırılmış, kremsi latte keyfi.", en: "Creamy latte enjoyment flavored with caramel syrup." },
           ingredients: { tr: "Espresso, süt, karamel şurubu, süt köpüğü", en: "Espresso, milk, caramel syrup, milk foam" },
           image: "/images/drinks/latte.png"
@@ -340,6 +344,13 @@ const menuData = {
           price: "180 TL",
           description: { tr: "Geleneksel yöntemle pişirilmiş, köpüklü Türk kahvesi.", en: "Traditional brewed, frothy Turkish coffee." },
           ingredients: { tr: "Türk kahvesi", en: "Turkish coffee" },
+          image: "/images/drinks/turk_kahvesi.png"
+        },
+        {
+          name: { tr: "Double Türk Kahvesi", en: "Double Turkish Coffee" },
+          price: "250 TL",
+          description: { tr: "Duble fincanda servis edilen, ekstra keyifli Türk kahvesi.", en: "Extra enjoyable Turkish coffee served in a double cup." },
+          ingredients: { tr: "Çift doz Türk kahvesi", en: "Double dose Turkish coffee" },
           image: "/images/drinks/turk_kahvesi.png"
         },
         {
@@ -441,7 +452,7 @@ const menuData = {
         },
         {
           name: { tr: "Aromalı Redbull", en: "Flavored Redbull" },
-          price: "300 TL",
+          price: "350 TL",
           description: { tr: "Çeşitli aromalarda enerji dolu serinlik.", en: "Energy-filled coolness in various flavors." },
           ingredients: { tr: "Aromalı Redbull", en: "Flavored Redbull" },
           image: "/images/drinks/redbull.png"
@@ -469,10 +480,25 @@ const menuData = {
         },
         {
           name: { tr: "Meyve Suları", en: "Fruit Juices" },
-          price: "150 TL",
+          price: "200 TL",
           description: { tr: "Taze sıkılmış meyve suyu çeşitleri: Elma, Şeftali, Karışık, Vişne. Bardakta servis edilir.", en: "Freshly squeezed fruit juice varieties: Apple, Peach, Mixed, Cherry. Served in a glass." },
           ingredients: { tr: "Seçtiğiniz meyve suyu", en: "Fruit juice of your choice" },
           image: "/images/drinks/seftali_suyu.png"
+        }
+      ]
+    }
+  ],
+  music: [
+    {
+      category: "Canlı Müzik",
+      icon: "music",
+      items: [
+        {
+          name: { tr: "Canlı Müzik Katılım", en: "Live Music Entrance" },
+          price: "200 TL",
+          description: { tr: "Canlı müzik etkinliğimize katılım bedeli.", en: "Entrance fee for our live music event." },
+          ingredients: { tr: "Eğlence ve Müzik", en: "Entertainment and Music" },
+          image: "" // Fallback to icon
         }
       ]
     }
@@ -670,23 +696,33 @@ function App() {
           <div className="flex gap-3">
             <button
               onClick={() => setActiveTab('food')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'food'
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'food'
                 ? 'bg-cream text-forest-green shadow-lg'
                 : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
                 }`}
             >
               <UtensilsCrossed className="w-5 h-5" />
-              <span>{t.food}</span>
+              <span className="text-sm md:text-base">{t.food}</span>
             </button>
             <button
               onClick={() => setActiveTab('drinks')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'drinks'
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'drinks'
                 ? 'bg-cream text-forest-green shadow-lg'
                 : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
                 }`}
             >
               <Coffee className="w-5 h-5" />
-              <span>{t.drinks}</span>
+              <span className="text-sm md:text-base">{t.drinks}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('music')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'music'
+                ? 'bg-cream text-forest-green shadow-lg'
+                : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
+                }`}
+            >
+              <Music className="w-5 h-5" />
+              <span className="text-sm md:text-base">{t.music}</span>
             </button>
           </div>
         </div>
@@ -694,7 +730,7 @@ function App() {
 
       {/* Menu Content */}
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {activeTab === 'food' ? (
+        {activeTab === 'food' && (
           <div>
             {menuData.food.map((section, idx) => (
               <CategorySection
@@ -704,7 +740,9 @@ function App() {
               />
             ))}
           </div>
-        ) : (
+        )}
+
+        {activeTab === 'drinks' && (
           <div>
             {menuData.drinks.map((section, idx) => (
               <div key={idx} className="mb-10">
@@ -715,6 +753,25 @@ function App() {
                   ) : (
                     <Snowflake className="w-6 h-6 text-blue-400" />
                   )}
+                  {t.categories[section.category] || section.category}
+                </h2>
+                <div className="grid gap-4">
+                  {section.items.map((item, itemIdx) => (
+                    <MenuItem key={itemIdx} item={item} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'music' && (
+          <div>
+            {menuData.music.map((section, idx) => (
+              <div key={idx} className="mb-10">
+                <h2 className="text-2xl font-bold text-forest-green mb-5 flex items-center gap-3">
+                  <div className="w-1 h-8 bg-gradient-to-b from-forest-green to-gold rounded-full"></div>
+                  <Music className="w-6 h-6 text-purple-500" />
                   {t.categories[section.category] || section.category}
                 </h2>
                 <div className="grid gap-4">
