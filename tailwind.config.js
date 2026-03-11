@@ -8,6 +8,7 @@ module.exports = {
             colors: {
                 'cream': '#F9F5F0',
                 'forest-green': '#1A4D3E',
+                'slate-navy': '#0f172a',
                 'gold': '#C9A961',
             },
             animation: {

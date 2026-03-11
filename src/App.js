@@ -9,14 +9,17 @@ const translations = {
     sloganBottom: "lezzet dolu bir yolculuğa hazır olun",
     premium: "Premium Ice Lounge",
     digitalMenu: "Dijital Menü",
+    menuTab: "Menü",
+    entertainmentTab: "Canlı Müzik & Eğlence",
     food: "Yiyecekler",
     drinks: "İçecekler",
-    music: "Canlı Müzik",
     enjoy: "Afiyet olsun!",
     ingredients: "İçerik:",
     location: "Konum",
     contact: "İletişim",
     categories: {
+      "Aparatif ve Eğlence": "Aparatif ve Eğlence",
+      "Canlı Müzik": "Canlı Müzik",
       "Kampanyalar": "Kampanyalar",
       "Tostlar": "Tostlar",
       "Burgerler": "Burgerler",
@@ -25,7 +28,6 @@ const translations = {
       "Sıcak İçecekler": "Sıcak İçecekler",
       "Soğuk İçecekler": "Soğuk İçecekler",
       "Tatlılar": "Tatlılar",
-      "Canlı Müzik": "Canlı Müzik"
     }
   },
   en: {
@@ -34,14 +36,17 @@ const translations = {
     sloganBottom: "get ready for a journey full of flavor",
     premium: "Premium Ice Lounge",
     digitalMenu: "Digital Menu",
+    menuTab: "Menu",
+    entertainmentTab: "Live Music & Fun",
     food: "Food",
     drinks: "Drinks",
-    music: "Live Music",
     enjoy: "Enjoy your meal!",
     ingredients: "Ingredients:",
     location: "Location",
     contact: "Contact",
     categories: {
+      "Aparatif ve Eğlence": "Snacks & Fun",
+      "Canlı Müzik": "Live Music",
       "Kampanyalar": "Campaigns",
       "Tostlar": "Toasts",
       "Burgerler": "Burgers",
@@ -50,14 +55,25 @@ const translations = {
       "Sıcak İçecekler": "Hot Beverages",
       "Soğuk İçecekler": "Cold Beverages",
       "Tatlılar": "Desserts",
-      "Canlı Müzik": "Live Music"
     }
   }
 };
 
-// Menu Data with translations
+// Menu Data
 const menuData = {
   food: [
+    {
+      category: "Aparatif ve Eğlence",
+      items: [
+        {
+          name: { tr: "Marshmallow", en: "Marshmallow" },
+          price: "100 TL",
+          description: { tr: "Çubukta 3 adet marshmallow, ateş başında keyifli bir atıştırmalık.", en: "3 marshmallows on a stick, a delightful snack by the fire." },
+          ingredients: { tr: "Marshmallow (3 adet)", en: "Marshmallow (3 pieces)" },
+          image: "/images/drinks/marshmallow.png"
+        }
+      ]
+    },
     {
       category: "Kampanyalar",
       items: [
@@ -472,13 +488,6 @@ const menuData = {
           image: "/images/drinks/ayran_new.png"
         },
         {
-          name: { tr: "Marshmallow", en: "Marshmallow" },
-          price: "100 TL",
-          description: { tr: "Çubukta 3 adet marshmallow, tatlı bir atıştırmalık.", en: "3 marshmallows on a stick, a sweet snack." },
-          ingredients: { tr: "Marshmallow (3 adet)", en: "Marshmallow (3 pieces)" },
-          image: "/images/drinks/marshmallow.png"
-        },
-        {
           name: { tr: "Meyve Suları", en: "Fruit Juices" },
           price: "200 TL",
           description: { tr: "Taze sıkılmış meyve suyu çeşitleri: Elma, Şeftali, Karışık, Vişne. Bardakta servis edilir.", en: "Freshly squeezed fruit juice varieties: Apple, Peach, Mixed, Cherry. Served in a glass." },
@@ -488,27 +497,58 @@ const menuData = {
       ]
     }
   ],
-  music: [
+  entertainment: [
     {
       category: "Canlı Müzik",
-      icon: "music",
       items: [
         {
           name: { tr: "Canlı Müzik Katılım", en: "Live Music Entrance" },
           price: "200 TL",
           description: { tr: "Canlı müzik etkinliğimize katılım bedeli.", en: "Entrance fee for our live music event." },
           ingredients: { tr: "Eğlence ve Müzik", en: "Entertainment and Music" },
-          image: "" // Fallback to icon
+          image: ""
         }
       ]
     }
   ]
 };
 
+// ── Live Event Schedule ── (her etkinliği buraya ekle)
+const liveEvents = [
+  {
+    day: { tr: "Cuma", en: "Friday" },
+    date: "14 Mart",
+    artist: "Sanatçı Adı",
+    genre: { tr: "Akustik", en: "Acoustic" },
+    time: "21:00",
+    note: { tr: "Rezervasyon önerilir", en: "Reservation recommended" }
+  },
+  {
+    day: { tr: "Cumartesi", en: "Saturday" },
+    date: "15 Mart",
+    artist: "Sanatçı Adı",
+    genre: { tr: "Caz", en: "Jazz" },
+    time: "22:00",
+    note: { tr: "Sınırlı kapasite", en: "Limited capacity" }
+  },
+];
+
 function App() {
   const [showMenu, setShowMenu] = useState(false);
-  const [activeTab, setActiveTab] = useState('food');
+  const [activeTab, setActiveTab] = useState('menu');
+  const [menuSubTab, setMenuSubTab] = useState('food');
   const [lang, setLang] = useState('tr');
+  const [eventIndex, setEventIndex] = useState(0);
+
+  // Auto-rotate events
+  React.useEffect(() => {
+    if (liveEvents.length <= 1) return;
+    const timer = setInterval(() => {
+      setEventIndex(prev => (prev + 1) % liveEvents.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
 
   const t = translations[lang];
 
@@ -653,14 +693,14 @@ function App() {
     </div>
   );
 
-  // Category Section Component
+  // Category Section Component — used in Menu > Yiyecekler
   const CategorySection = ({ category, items }) => (
     <div className="mb-10">
-      <h2 className="text-2xl font-bold text-forest-green mb-5 flex items-center gap-3">
-        <div className="w-1 h-8 bg-gradient-to-b from-forest-green to-gold rounded-full"></div>
+      <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-3">
+        <div className="w-1 h-7 bg-gradient-to-b from-[#1A4D3E] to-gold rounded-full"></div>
         {t.categories[category] || category}
       </h2>
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         {items.map((item, idx) => (
           <MenuItem key={idx} item={item} />
         ))}
@@ -670,189 +710,237 @@ function App() {
 
   // Main Menu Component
   const Menu = () => (
-    <div className="min-h-screen bg-cream">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-forest-green shadow-lg">
-        <div className="max-w-4xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-cream rounded-full flex items-center justify-center">
-                <Snowflake className="w-7 h-7 text-gold" strokeWidth={2} />
+    <div className="min-h-screen bg-[#f8f6f2]">
+
+      {/* ═══ HEADER ═══ */}
+      <div className="sticky top-0 z-50 bg-slate-navy">
+        <div className="max-w-5xl mx-auto px-5 pt-4 pb-0">
+
+          {/* Brand row */}
+          <div className="flex items-center justify-between pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gold/15 border border-gold/25 rounded-full flex items-center justify-center">
+                <Snowflake className="w-5 h-5 text-gold" strokeWidth={2} />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold">
-                  <span className="text-[#A8D5E2]">SOO </span>
+                <h1 className="text-2xl font-bold leading-none">
+                  <span className="text-[#93c5fd]">SOO </span>
                   <span className="text-gold">HO</span>
                 </h1>
-                <p className="text-gold/80 text-xs md:text-sm">{t.digitalMenu}</p>
+                <p className="text-white/35 text-[10px] tracking-widest uppercase mt-0.5">{t.digitalMenu}</p>
               </div>
             </div>
-
-            {/* Language Switcher in Menu */}
             <LanguageSwitcher isDark={true} />
           </div>
 
-          {/* Tab Navigation */}
-          <div className="flex gap-3">
+          {/* ── Main 2-tab strip ── */}
+          <div className="flex border-t border-white/10">
             <button
-              onClick={() => setActiveTab('food')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'food'
-                ? 'bg-cream text-forest-green shadow-lg'
-                : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
+              onClick={() => setActiveTab('menu')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all duration-200 border-b-2 ${activeTab === 'menu'
+                ? 'border-gold text-gold'
+                : 'border-transparent text-white/45 hover:text-white/75'
                 }`}
             >
-              <UtensilsCrossed className="w-5 h-5" />
-              <span className="text-sm md:text-base">{t.food}</span>
+              <UtensilsCrossed className="w-4 h-4" />
+              {t.menuTab}
             </button>
             <button
-              onClick={() => setActiveTab('drinks')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'drinks'
-                ? 'bg-cream text-forest-green shadow-lg'
-                : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
+              onClick={() => setActiveTab('entertainment')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all duration-200 border-b-2 ${activeTab === 'entertainment'
+                ? 'border-fuchsia-400 text-fuchsia-300'
+                : 'border-transparent text-white/45 hover:text-white/75'
                 }`}
             >
-              <Coffee className="w-5 h-5" />
-              <span className="text-sm md:text-base">{t.drinks}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('music')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 md:px-4 rounded-xl font-medium transition-all duration-300 ${activeTab === 'music'
-                ? 'bg-cream text-forest-green shadow-lg'
-                : 'bg-forest-green/50 text-cream/70 hover:bg-forest-green/70'
-                }`}
-            >
-              <Music className="w-5 h-5" />
-              <span className="text-sm md:text-base">{t.music}</span>
+              <Music className="w-4 h-4" />
+              {t.entertainmentTab}
             </button>
           </div>
+
+          {/* ── Sub-tabs (only for Menu) ── */}
+          {activeTab === 'menu' && (
+            <div className="flex gap-2 py-3 border-t border-white/[0.06]">
+              <button
+                onClick={() => setMenuSubTab('food')}
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${menuSubTab === 'food' ? 'bg-gold text-slate-navy' : 'bg-white/10 text-white/55 hover:bg-white/15'
+                  }`}
+              >
+                <UtensilsCrossed className="w-3 h-3" />
+                {t.food}
+              </button>
+              <button
+                onClick={() => setMenuSubTab('drinks')}
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${menuSubTab === 'drinks' ? 'bg-gold text-slate-navy' : 'bg-white/10 text-white/55 hover:bg-white/15'
+                  }`}
+              >
+                <Coffee className="w-3 h-3" />
+                {t.drinks}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Menu Content */}
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {activeTab === 'food' && (
-          <div>
-            {menuData.food.map((section, idx) => (
-              <CategorySection
-                key={idx}
-                category={section.category}
-                items={section.items}
-              />
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'drinks' && (
-          <div>
-            {menuData.drinks.map((section, idx) => (
-              <div key={idx} className="mb-10">
-                <h2 className="text-2xl font-bold text-forest-green mb-5 flex items-center gap-3">
-                  <div className="w-1 h-8 bg-gradient-to-b from-forest-green to-gold rounded-full"></div>
-                  {section.icon === 'hot' ? (
-                    <Flame className="w-6 h-6 text-orange-500" />
-                  ) : (
-                    <Snowflake className="w-6 h-6 text-blue-400" />
-                  )}
-                  {t.categories[section.category] || section.category}
-                </h2>
-                <div className="grid gap-4">
-                  {section.items.map((item, itemIdx) => (
-                    <MenuItem key={itemIdx} item={item} />
-                  ))}
+      {/* ═══ MENU TAB ═══ */}
+      {activeTab === 'menu' && (
+        <div className="max-w-4xl mx-auto px-5 py-8">
+          {menuSubTab === 'food' && (
+            <div>
+              {menuData.food.map((section, idx) => (
+                <CategorySection key={idx} category={section.category} items={section.items} />
+              ))}
+            </div>
+          )}
+          {menuSubTab === 'drinks' && (
+            <div>
+              {menuData.drinks.map((section, idx) => (
+                <div key={idx} className="mb-10">
+                  <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-3">
+                    <div className="w-1 h-7 bg-gradient-to-b from-[#1A4D3E] to-gold rounded-full"></div>
+                    {section.icon === 'hot'
+                      ? <Flame className="w-5 h-5 text-orange-500" />
+                      : <Snowflake className="w-5 h-5 text-blue-400" />}
+                    {t.categories[section.category] || section.category}
+                  </h2>
+                  <div className="grid gap-3">
+                    {section.items.map((item, ii) => <MenuItem key={ii} item={item} />)}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-        {activeTab === 'music' && (
-          <div>
-            {menuData.music.map((section, idx) => (
-              <div key={idx} className="mb-10">
-                <h2 className="text-2xl font-bold text-forest-green mb-5 flex items-center gap-3">
-                  <div className="w-1 h-8 bg-gradient-to-b from-forest-green to-gold rounded-full"></div>
-                  <Music className="w-6 h-6 text-purple-500" />
-                  {t.categories[section.category] || section.category}
-                </h2>
-                <div className="grid gap-4">
-                  {section.items.map((item, itemIdx) => (
-                    <MenuItem key={itemIdx} item={item} />
-                  ))}
+      {/* ═══ ENTERTAINMENT TAB ═══ */}
+      {activeTab === 'entertainment' && (
+        <div className="relative min-h-[calc(100vh-130px)] flex flex-col overflow-hidden bg-[#0c0d11]">
+          {/* Ambient soft bg */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[55%] bg-gradient-to-b from-slate-700/15 via-indigo-900/8 to-transparent blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none"></div>
+          <div className="absolute top-1/3 -left-24 w-64 h-64 bg-indigo-800/8 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute top-1/3 -right-24 w-64 h-64 bg-slate-700/8 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)', backgroundSize: '48px 48px' }}
+          ></div>
+
+          <div className="relative z-10 flex flex-col items-center px-5 py-10 md:py-16 w-full">
+
+            {/* Stage lights — soft ice blue/white */}
+            <div className="flex items-end justify-center gap-5 md:gap-10 mb-10">
+              {[...Array(5)].map((_, i) => {
+                const c = ['#cbd5e1', '#94a3b8', '#e2e8f0', '#94a3b8', '#cbd5e1'];
+                const g = ['rgba(203,213,225,.3)', 'rgba(148,163,184,.3)', 'rgba(226,232,240,.35)', 'rgba(148,163,184,.3)', 'rgba(203,213,225,.3)'];
+                const h = [80, 120, 160, 120, 80];
+                return (
+                  <div key={i} className={`flex flex-col items-center gap-1 ${i === 2 ? 'scale-110' : 'opacity-50'}`}>
+                    <div className="w-1 h-5 bg-slate-700 rounded-t-full"></div>
+                    <div className="w-3.5 h-3.5 rounded-full blur-[2px] animate-pulse-slow"
+                      style={{ background: c[i], animationDelay: `${i * .3}s`, boxShadow: `0 0 10px 4px ${g[i]}` }}></div>
+                    <div className="w-px opacity-15"
+                      style={{ height: `${h[i]}px`, background: `linear-gradient(to bottom,${c[i]},transparent)` }}></div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Icon */}
+            <div className="relative mb-5">
+              <div className="absolute inset-0 rounded-full bg-slate-500/10 blur-2xl scale-150"></div>
+              <div className="relative inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full border border-slate-500/20 bg-gradient-to-br from-slate-700/20 to-indigo-800/20 shadow-[0_0_40px_rgba(100,116,139,.2)]">
+                <Music className="w-10 h-10 md:w-12 md:h-12 text-slate-300" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-3 text-center tracking-tight">
+              {t.entertainmentTab}
+            </h2>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="h-px w-10 bg-gradient-to-r from-transparent to-slate-500/40"></div>
+              <Sparkles className="w-3 h-3 text-slate-500/50" />
+              <div className="h-px w-10 bg-gradient-to-l from-transparent to-slate-500/40"></div>
+            </div>
+
+            <p className="text-slate-400/70 text-sm font-light max-w-xs text-center leading-relaxed mb-10">
+              {lang === 'tr' ? 'Müziğin ritmine kapılın, ateş başında unutulmaz bir akşam yaşayın.' : 'Get lost in the rhythm of music & enjoy the night by the fire.'}
+            </p>
+
+
+            {/* Ticket card */}
+
+            {menuData.entertainment.filter(s => s.category === 'Canlı Müzik').map((section, si) =>
+              section.items.map((item, ii) => (
+                <div key={`${si}-${ii}`} className="relative w-full max-w-sm group mb-4">
+                  <div className="relative bg-[#12141a] border border-slate-700/50 rounded-2xl overflow-hidden group-hover:border-slate-500/50 transition-colors duration-300">
+                    <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-500/50 to-transparent"></div>
+                    <div className="px-8 py-6 flex flex-col items-center text-center gap-2">
+                      <span className="text-[10px] uppercase tracking-[.3em] text-slate-500 font-semibold">🎫 {lang === 'tr' ? 'Bilet' : 'Ticket'}</span>
+                      <h3 className="text-2xl font-bold text-white tracking-wide">{item.name[lang]}</h3>
+                      <div className="text-3xl font-black text-white">{item.price}</div>
+                      <p className="text-slate-500 text-sm leading-relaxed">{item.description[lang]}</p>
+                    </div>
+                    <div className="flex items-center px-4">
+                      <div className="w-4 h-4 rounded-full bg-[#0c0d11] -ml-6 flex-shrink-0"></div>
+                      <div className="flex-1 border-t border-dashed border-slate-700/50 mx-2"></div>
+                      <div className="w-4 h-4 rounded-full bg-[#0c0d11] -mr-6 flex-shrink-0"></div>
+                    </div>
+                    <div className="px-8 py-3.5 flex items-center justify-center gap-2">
+                      <Music className="w-3 h-3 text-slate-700" />
+                      <span className="text-slate-700 text-[10px] tracking-widest uppercase">SOO HO Ice Lounge</span>
+                      <Music className="w-3 h-3 text-slate-700" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))
+            )}
 
-      {/* Footer */}
-      <div className="bg-forest-green text-cream py-10 mt-16">
-        <div className="max-w-4xl mx-auto px-6">
-          {/* Contact Info */}
+            {/* EQ bars — soft */}
+            <div className="mt-12 flex items-end justify-center gap-1">
+              {[12, 20, 32, 18, 28, 36, 22, 30, 16, 26, 20, 14].map((h, i) => (
+                <div key={i} className="w-1.5 rounded-full animate-pulse-slow"
+                  style={{ height: `${h}px`, background: 'linear-gradient(to top,#475569,#94a3b8)', animationDelay: `${i * .12}s`, opacity: .35 }}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* ═══ FOOTER ═══ */}
+      <div className="bg-slate-navy text-cream py-10">
+        <div className="max-w-4xl mx-auto px-5">
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {/* Location */}
-            <div className="flex items-start gap-3 bg-forest-green/50 p-5 rounded-xl border border-cream/10">
+            <div className="flex items-start gap-3 bg-white/5 p-5 rounded-xl border border-white/10">
               <MapPin className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold text-gold mb-1">{t.location}</h3>
-                <p className="text-sm text-cream/80 leading-relaxed">
-                  Dedeman Ski Lodge<br />
-                  Üst Bahçesi/25080
-                </p>
+                <p className="text-sm text-cream/65 leading-relaxed">Dedeman Ski Lodge<br />Üst Bahçesi/25080</p>
               </div>
             </div>
-
-            {/* Contact Buttons */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <h3 className="font-semibold text-gold mb-3">{t.contact}</h3>
-
-              {/* WhatsApp Button */}
-              <a
-                href="https://wa.me/905012507646"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 bg-forest-green/50 p-3 rounded-xl border border-cream/10 hover:border-gold/50 transition-all duration-300 hover:bg-forest-green/70 group"
-              >
-                <Phone className="w-5 h-5 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-cream/90 group-hover:text-cream">
-                  +90 501 250 76 46
-                </span>
-              </a>
-
-              {/* Email Button */}
-              <a
-                href="mailto:sooholcelounge@gmail.com"
-                className="flex items-center gap-3 bg-forest-green/50 p-3 rounded-xl border border-cream/10 hover:border-gold/50 transition-all duration-300 hover:bg-forest-green/70 group"
-              >
-                <Mail className="w-5 h-5 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-cream/90 group-hover:text-cream">
-                  sooholcelounge@gmail.com
-                </span>
-              </a>
-
-              {/* Instagram Button */}
-              <a
-                href="https://instagram.com/soohoicelounge"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 bg-forest-green/50 p-3 rounded-xl border border-cream/10 hover:border-gold/50 transition-all duration-300 hover:bg-forest-green/70 group"
-              >
-                <Instagram className="w-5 h-5 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-sm text-cream/90 group-hover:text-cream">
-                  @soohoicelounge
-                </span>
-              </a>
+              {[['https://wa.me/905012507646', '_blank', Phone, '+90 501 250 76 46'],
+              ['mailto:sooholcelounge@gmail.com', undefined, Mail, 'sooholcelounge@gmail.com'],
+              ['https://instagram.com/soohoicelounge', '_blank', Instagram, '@soohoicelounge']
+              ].map(([href, target, Icon, label], i) => (
+                <a key={i} href={href} target={target} rel={target ? 'noopener noreferrer' : undefined}
+                  className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 hover:border-gold/35 hover:bg-white/10 transition-all duration-200 group">
+                  <Icon className="w-4 h-4 text-gold flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="text-sm text-cream/70">{label}</span>
+                </a>
+              ))}
             </div>
           </div>
-
-          {/* Copyright */}
-          <div className="text-center pt-6 border-t border-cream/10">
-            <p className="text-gold/80 mb-2">{t.enjoy}</p>
-            <p className="text-sm text-cream/60">© 2025 SOO HO Ice Lounge</p>
+          <div className="text-center pt-6 border-t border-white/10">
+            <p className="text-gold/65 mb-2">{t.enjoy}</p>
+            <p className="text-xs text-cream/35">© 2025 SOO HO Ice Lounge</p>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 
   return (
